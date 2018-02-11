@@ -6,7 +6,6 @@ import csv
 EMPTY_SEAT = 'Z'
 
 
-# todo make number_tables, table_size static and or constant?
 class Arrangement:
     def __init__(self, number_tables, table_size, guest_list):
         self.tables = []  # list of tables
@@ -16,14 +15,10 @@ class Arrangement:
         self.guest_list = deepcopy(guest_list)  # make a copy of guest_list but don't change caller's list
         self.init_tuples()
         self.shuffle_tuples()
- #       self.create_tables()
- #       self.print_tables()    # take this out later
- #       self.seat_guests()  # should NOT BE CALLED I CONSTRUCTOR, ONLY INITIAL POPULATION, NOT FUTURE GENS
- #       self.print_tables()  # take this out later
         self.fitness = None
 
     # defines tuples for ever spot at every table (table #, seat #)
-    def init_tuples(self):  # todo check if this is getting the correct tuples for 12 guests, 3 tables
+    def init_tuples(self):
         for i in range(self.number_tables):
             for j in range(self.table_size):
                 self.table_seat_tuples.append((i, j))
@@ -39,7 +34,7 @@ class Arrangement:
             self.tables.append(Table(self.table_size, i))
 
     # to facilitate crossover Arrangements will pass representation of tables as a single list to population
-    def export_master_list(self):  # todo breakpoint here check it's working
+    def export_master_list(self):
         master_list = []
         for table in self.tables:
             for guest in table.guests:
@@ -59,8 +54,7 @@ class Arrangement:
             print(index)
             t.print_table()
 
-    def seat_guests(self):  # todo find out why arrangements guests have the wrong table number and position number
-                            # todo when testing test_diversity in population
+    def seat_guests(self):
         """Only used during population initialization"""
         for guest in self.guest_list:
             if len(guest.preferences) > 1:
@@ -79,14 +73,10 @@ class Arrangement:
                         for il_person in il_table.guests:
                             if not(ol_person is il_person) and not (il_person is EMPTY_SEAT):
                                 il_person_index = il_person.index
-                                # todo make sure this works with names coming in the csv file and not just numbers
                                 pref = Arrangement.get_preference(ol_person, il_person_index)
                                 total_penalty += self.get_penalty(ol_person, il_person, pref)
-        self.fitness = total_penalty/2  # /2 because we've counted every relation between guests twice
+        self.fitness = total_penalty
 
-
-
-    # todo make sure this works with names coming in the csv file and not just numbers
     @staticmethod
     def get_preference(outer_guest, preference_index):
         pref = outer_guest.preferences[preference_index]
@@ -162,7 +152,7 @@ class Arrangement:
         else:
             return False
 
-    def guest_from_index(self, index): # todo step through this and make sure it's working
+    def guest_from_index(self, index):
         "Given a guests self.index find them and return their table # and position #"
         for table in self.tables:
             for guest in table.guests:
@@ -172,7 +162,7 @@ class Arrangement:
                     return guest.table_number, guest.position_number
         print("Guest not found: check guest_from_index() in Arrangement")
 
-    def check_seat_right(self, index_p1, index_p2):  # todo step through this and make sure it's working
+    def check_seat_right(self, index_p1, index_p2):
         """Given the index of person 1 this function returns true if the index of
             peron2 is found to the right of person1"""
         for table in self.tables:
@@ -185,7 +175,7 @@ class Arrangement:
                     else:
                         return index_p2 == table.guests[i + 1].index
 
-    def check_seat_left(self, index_p1, index_p2):  # todo step through this and make sure it's working
+    def check_seat_left(self, index_p1, index_p2):
         """Given the index of person 1 this function returns true if the index of
             peron2 is found to the right of person1"""
         for table in self.tables:

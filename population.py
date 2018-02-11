@@ -56,14 +56,14 @@ class Population:
                 self.evolve_one_generation_b()
         self.get_best_solution()
 
-    def evolve_one_generation_b(self):  # todo haven't changed this yet
+    def evolve_one_generation_b(self):
         # for each window select parents
         range_of_arrangements = int(POPULATION_SIZE / WINDOW_SIZE)
         rand.shuffle(self.arrangement_list)
         diversity_for_avg = []
         new_arrangements = []
         for i in range(range_of_arrangements):
-            window = copy.deepcopy(self.arrangement_list[:WINDOW_SIZE])  # todo deepcpy?
+            window = copy.deepcopy(self.arrangement_list[:WINDOW_SIZE])
             del (self.arrangement_list[:WINDOW_SIZE])
             for arrangement in window:
                 arrangement.get_fitness()
@@ -84,12 +84,8 @@ class Population:
             list_for_mutating = []  # list of lists
 
             for i_ in range(MUTANT_GROUPS):
-                # p1_mutant = copy.deepcopy(p1_master_list)
-                # p2_mutant = copy.deepcopy(p2_master_list)
                 ch1_mutant = copy.deepcopy(child_list1)
                 ch2_mutant = copy.deepcopy(child_list2)
-                # list_for_mutating.append(p1_mutant)
-                # list_for_mutating.append(p2_mutant)
                 list_for_mutating.append(ch1_mutant)
                 list_for_mutating.append(ch2_mutant)
 
@@ -159,7 +155,7 @@ class Population:
                 i += 1
             for survivor in survivors:
                 new_arrangements.append(survivor)
-            diversity = self.measure_diversity(parent1, parent2)  # todo get avg diversity among group?
+            diversity = self.measure_diversity(parent1, parent2)
             diversity_for_avg.append(diversity)
             print("Parents fitness(1, 2): {} {} Their Diversity: {}".format(parent1.fitness, parent2.fitness, diversity))
 
@@ -170,11 +166,6 @@ class Population:
         self.arrangement_list = new_arrangements
         top_three_diversity = self.top_three_diversity()
         print("Diversity for the top three in the next generation: ", top_three_diversity)
-        # todo below is just for testing
-        #arr1, arr2 = self.arrangement_list[0], self.arrangement_list[1]
-        #self.test_diversity(arr1, arr2)
-        #diversity = self.measure_diversity(arr1, arr2)
-        #print("test")
 
     def evolve_one_generation_a(self):
         # for each window select parents
@@ -183,7 +174,7 @@ class Population:
         new_arrangements = []
         diversity_for_avg = []
         for i in range(range_of_arrangements):
-            window = copy.deepcopy(self.arrangement_list[:WINDOW_SIZE])  # todo deepcpy?
+            window = copy.deepcopy(self.arrangement_list[:WINDOW_SIZE])
             del (self.arrangement_list[:WINDOW_SIZE])
             for arrangement in window:
                 arrangement.get_fitness()
@@ -204,12 +195,8 @@ class Population:
             list_for_mutating = []  # list of lists
 
             for i_ in range(MUTANT_GROUPS):
-                # p1_mutant = copy.deepcopy(p1_master_list)
-                # p2_mutant = copy.deepcopy(p2_master_list)
                 ch1_mutant = copy.deepcopy(child_list1)
                 ch2_mutant = copy.deepcopy(child_list2)
-                # list_for_mutating.append(p1_mutant)
-                # list_for_mutating.append(p2_mutant)
                 list_for_mutating.append(ch1_mutant)
                 list_for_mutating.append(ch2_mutant)
 
@@ -260,11 +247,6 @@ class Population:
         self.arrangement_list = new_arrangements
         top_three_diversity = self.top_three_diversity()
         print("Diversity for the top in the next generation: ", top_three_diversity)
-        # todo below is just for testing
-        #arr1, arr2 = self.arrangement_list[0], self.arrangement_list[1]
-        #self.test_diversity(arr1, arr2)
-        #diversity = self.measure_diversity(arr1, arr2)
-        #print("test")
 
     def pmx_crossover(self, person_list1, person_list2, table_size):
         child_list = [EMPTY_SEAT] * len(person_list1)
@@ -278,14 +260,13 @@ class Population:
         # segment_end = 2
         # segment_start = 7
 
-        #segment_start = 3  # todo swap these commented lines
-        #segment_end = 6
+        # segment_start = 3
+        # segment_end = 6
         child_list[segment_start: segment_end + 1] = p1_list_copy[segment_start: segment_end + 1]
 #        print("seg start, end, list: ", segment_start, segment_end, child_list)
 
         # step 2 from slides
         for i in range(segment_start, segment_end + 1):
-            # todo if things aren't working maybe don't need this if statement but need next line
             if not (p2_list_copy[i] == EMPTY_SEAT):
                 self.go_opposite_get_index(p2_list_copy[i], i, p1_list_copy, p2_list_copy, child_list, table_size)
 
@@ -572,12 +553,12 @@ class Population:
         diversity = self.measure_diversity(arr1, arr2)
         print("working")
 
-    def measure_diversity(self, arr1, arr2):  # todo step through this and make sure it's working
+    def measure_diversity(self, arr1, arr2):
         diversity = 0
         seating_matched = False
         position_matched = 0  # 0 means nextToR and 1 means nextToL
         for table in arr1.tables:
-            for i, person in enumerate(table.guests):  # todo step through to see where diverty per person fails?
+            for i, person in enumerate(table.guests):
                 if person is EMPTY_SEAT:
                     continue
                 A_nexto_R = self.nextToR(person.index, arr1)
@@ -616,7 +597,7 @@ class Population:
 
         return diversity
 
-    def nextToR(self, person_number, arrangement): #todo step through this make sure working
+    def nextToR(self, person_number, arrangement):
         """Given a person's identifier index number and an arrangement
             return the person's identifier seated to the right"""
         for table in arrangement.tables:
@@ -631,7 +612,7 @@ class Population:
                             return EMPTY_SEAT
                         return table.guests[guest.position_number - 1].index
 
-    def nextToL(self, person_number, arrangement): #todo step through this make sure working
+    def nextToL(self, person_number, arrangement):
         """Given a person's identifier index number and an arrangement
             return the person's identifier seated to the right"""
         for table in arrangement.tables:
@@ -646,7 +627,7 @@ class Population:
                             return EMPTY_SEAT
                         return table.guests[guest.position_number + 1].index
 
-    def check_share_table(self, id_1, id_2, arrangement):  #todo step through this make sure working
+    def check_share_table(self, id_1, id_2, arrangement):
         """Check if person.index = 1d_1 && id_2 share a table in arrangement"""
         first_table, first_position = arrangement.guest_from_index(id_1)
         second_table, second_position = arrangement.guest_from_index(id_2)
@@ -663,7 +644,6 @@ class Population:
     @staticmethod
     def in_list(index_search, person_list):
         for index, i in enumerate(person_list):
-             # if self.__eq__(i):
             if index_search == i.index:
                  return True
         return False
@@ -673,49 +653,4 @@ class Population:
         for index, i in enumerate(person_list):
             if index_search == i.index:
                 return index
-    #
-    # def check_left_left(self, person, table, arr2):
-    #     """take the person find their identity and the identity
-    #         of the peron on their left in arr1 then check if the same person is
-    #         seated to the left of peron in arr2"""
-    #     middle_person_identity = person.index
-    #     left_person_index1, right_person_index1 = self.leftright_index(i, table.guests)
-    #     table_arr2, position_arr2 = arr2.guest_from_index(middle_person_identity)
-    #     if position_arr2 == 0:
-    #         left_index_arr2 = arr2.tables[table_arr2].guests[self.table_size - 1]
-    #     else:
-    #         left_index_arr2 = arr2.tables[table_arr2].guests[position_arr2 - 1]
-    #     return left_index_arr2 == left_person_index1
-    #
-    #
-    # def check_left_left(self, person, table, arr2):  # todo need this?
-    #     """take the person find their identity and the identity
-    #         of the peron on their left in arr1 then check if the same person is
-    #         seated to the left of peron in arr2"""
-    #     middle_person_identity = person.index
-    #     left_person_index1, right_person_index1 = self.leftright_index(i, table.guests)
-    #     table_arr2, position_arr2 = arr2.guest_from_index(middle_person_identity)
-    #     if position_arr2 == 0:
-    #         left_index_arr2 = arr2.tables[table_arr2].guests[self.table_size - 1]
-    #     else:
-    #         left_index_arr2 = arr2.tables[table_arr2].guests[position_arr2 - 1]
-    #     return left_index_arr2 == left_person_index1
-    #
-    # def leftright_index(self, middle_position, arrangement):  # todo need this?
-    #     """given the position in the table get the index of the persons to the left and right"""
-    #     if middle_position == 0:
-    #         left_person_index = table.guests[self.table_size - 1].index
-    #         right_person_index = table.guests[middle_position + 1].index
-    #     elif middle_position == self.table_size - 1:
-    #         left_person_index = table.guests[middle_position - 1].index
-    #         right_person_index = table.guests[0].index
-    #     else:
-    #         left_person_index = middle_position - 1
-    #         right_person_index = middle_position + 1
-    #
-    #     return left_person_index, right_person_index
-    #
-
-
-
 

@@ -7,7 +7,14 @@ from person import Person
 from population import Population
 from arrangement import Arrangement, EMPTY_SEAT
 
-NUMBER_GENERATIONS = 150
+"""
+    This is a solution to Assignment 1 Evolutionary Algorithms with Dr. Kharma, Concordia University, Winter 2018.
+    Given a csv file of guest preferences this program attempts to find an optimal seating arrangement using 
+    Evolutionary Algorithms. The fitness of the solution is based on a penalty system for ignoring guests preferences.
+    The lower the better. Diversity is a measure of how different the solutions are from each other.  
+"""
+
+NUMBER_GENERATIONS = 80
 # table_size = rand.randrange(5, 11)
 
 text_file = open('settings.txt', 'r')
@@ -60,9 +67,6 @@ with open(CSV_FILE) as csv_file:
 
 number_tables = math.ceil(number_guests / table_size)
 print("The number of guests and tables for this simulation is:", len(guest_list), number_tables)
-# for guest in guest_list:
-#     guest.print_preferences()
-
 
 population = Population(number_tables, table_size, guest_list)
 population.evolve_generations(NUMBER_GENERATIONS, False)  # True A only, False B runs with Diversity enhancement

@@ -4,7 +4,7 @@ class Person:
 
     # constructor must be passed a row from the csv file
     def __init__(self, person_index, name, csv_row):
-        self.index = person_index  # todo with the addition of name, index may now be unnecessary
+        self.index = person_index
         self.name = name
         self.preferences = csv_row[:]
         self.table_number = None
@@ -23,8 +23,6 @@ class Person:
     def assign_position(self, position_number):
         self.position_number = position_number
 
-
-# todo am i even using these two functions??
     def check_on_right(self, person2):
         """check if person2 is on the right at the same table of person1 """
         if self.table_number == person2.table_number:
